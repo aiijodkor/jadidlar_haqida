@@ -17,7 +17,7 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_applicati
 
 logging.basicConfig(level=logging.INFO)
 
-BOT_TOKEN = os.environ["BOT_TOKEN"]  # токен берётся из переменных Vercel, .env не нужен
+BOT_TOKEN = os.environ["BOT_TOKEN"]  # токен задаётся в Vercel → Environment Variables
 WEBHOOK_PATH = "/api/webhook"
 
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
