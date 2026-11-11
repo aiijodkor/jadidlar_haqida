@@ -19,3 +19,12 @@ Bot jadid ma’rifatparvarlari haqida qisqa ma’lumot, menyu va sodda viktorina
 5. Telegram’da botga `/start` yuboring. `/help` buyrug‘i botdan foydalanish bo‘yicha qisqa yordam beradi.
 
 `.env` `.gitignore` ro‘yxatida; token xavfsizligi uchun uni repozitoriyga qo‘shmang.
+
+## Vercel'ga joylash
+
+Vercel loyiha sozlamalarida **Root Directory** qiymatini `api` qilib belgilang;
+**Environment Variables** bo‘limida production muhiti uchun `BOT_TOKEN`
+bo‘lishi kerak. `api/app.py` Vercel uchun FastAPI ilovasini eksport qiladi,
+Telegram yangilanishlari esa `/api/webhook` va `/webhook` manzillarida qabul
+qilinadi. Domenni webhook sifatida ulashdan oldin deploy muvaffaqiyatli
+bo‘lganini va endpoint `POST` so‘roviga javob berishini tekshiring.

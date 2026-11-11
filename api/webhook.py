@@ -2,7 +2,6 @@ import logging
 import os
 import random
 
-from aiohttp import web
 from aiogram import Bot, Dispatcher, F, html
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -12,8 +11,10 @@ from aiogram.types import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     Message,
+    Update,
 )
-from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
+from fastapi import FastAPI, HTTPException, Request
+from pydantic import ValidationError
 
 logging.basicConfig(level=logging.INFO)
 
@@ -230,12 +231,21 @@ async def about_callback(callback: CallbackQuery) -> None:
         )
 
 
-# === Настройка webhook-приложения для Vercel ===
-def create_app() -> web.Application:
-    app = web.Application()
-    SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path=WEBHOOK_PATH)
-    setup_application(app, dp, bot=bot)
-    return app
+app = FastAPI()
 
 
-app = create_app()
+@app.post(WEBHOOK_PATH)
+@app.post("/webhook")
+async def handle_webhook(request: Request) -> dict[str, bool]:
+    try:
+        payload = await request.json()
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail="Invalid JSON") from exc
+
+    try:
+        update = Update.model_validate(payload, context={"bot": bot})
+    except ValidationError as exc:
+        raise HTTPException(status_code=400, detail="Invalid Telegram update") from exc
+
+    await dp.feed_update(bot, update)
+    return {"ok": True}
