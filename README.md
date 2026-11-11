@@ -22,7 +22,8 @@ Bot jadid ma’rifatparvarlari haqida qisqa ma’lumot, menyu va sodda viktorina
 
 ## Vercel'ga joylash
 
-Vercel loyiha sozlamalarida **Root Directory** qiymatini `api` qilib belgilang;
+Vercel loyiha sozlamalarida **Root Directory** repozitoriy ildizi (`./`) bo‘lishi
+kerak;
 **Environment Variables** bo‘limida production muhiti uchun `BOT_TOKEN`
 bo‘lishi kerak. `api/app.py` Vercel uchun FastAPI ilovasini eksport qiladi,
 Telegram yangilanishlari esa `/api/webhook` va `/webhook` manzillarida qabul
